@@ -38,7 +38,7 @@ const createTables = async () => {
       CREATE TABLE IF NOT EXISTS transactions (
         id SERIAL PRIMARY KEY,
         account_id INTEGER REFERENCES accounts(id),
-        amount INETEGER,
+        amount INTEGER,
         transaction_type VARCHAR(10)
       );
     `);
