@@ -1,11 +1,23 @@
 {
-  "name": "bankapp",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "kill-port 3000 && node index.js",
+    "dbSeed": "node dbSeed.js",
+    "dev": "kill-port 3000 && nodemon index.js"
   },
+  "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.24.3",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "kill-port": "^2.0.1",
+    "nodemon": "^3.0.1"
+  }
 }
