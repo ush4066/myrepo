@@ -5,15 +5,24 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "kill-port 3000 && node index.js",
+    "start": "kill-port 12300 && HT_MODE=RECORD DEBUG=ht* node index.js",
+    "start-test": "kill-port 12300 && HT_MODE=REPLAY DEBUG=ht* HT_CLI_SERVER_HOST=localhost HT_CLI_SERVER_PORT=13333 HT_SDK_SERVER_PORT=4444 node index.js",
+    "start-test-coverage": "kill-port 12300 && HT_MODE=REPLAY DEBUG=ht* HT_CLI_SERVER_HOST=localhost HT_CLI_SERVER_PORT=13333 HT_SDK_SERVER_PORT=4444 nyc node index.js",
     "dbSeed": "node dbSeed.js",
-    "dev": "kill-port 3000 && nodemon index.js"
+    "dev": "kill-port 12300 && HT_MODE=RECORD DEBUG=ht* nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hypertestco/node-sdk-old-safe": "/home/karan/Projects/sample-banking-node/ht-sdk-dist",
+    "@hypertestco/node-sdk": "/home/karan/Projects/autoqa/autoqa_v2/packages/node-sdk/dist",
+    "@opentelemetry/exporter-trace-otlp-grpc": "^0.45.1",
+    "@opentelemetry/resources": "^1.18.1",
+    "@opentelemetry/sdk-node": "^0.45.1",
+    "@opentelemetry/semantic-conventions": "^1.18.1",
     "fastify": "^4.24.3",
+    "nyc": "^15.1.0",
     "pg": "^8.11.3"
   },
   "devDependencies": {
