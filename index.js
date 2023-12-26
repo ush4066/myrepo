@@ -36,7 +36,7 @@ sdk.start();
 htSdk.autoInstrumentation();
 htSdk.setHtTracerProvider(sdk._tracerProvider);
 
-
+const axios = require('axios');
 const fastify = require('fastify')({ logger: true });
 const { Pool } = require('pg');
 
@@ -211,6 +211,7 @@ fastify.post('/transaction', async (request, reply) => {
 
 //Statement
 fastify.get('/statement', async (request, reply) => {
+  await axios.get('https://hypertest-demo-1234.requestcatcher.com/12345');
   try {
     const { accountId } = request.query;
     const balance = await pool.query('select current_balance from accounts where id = $1', [accountId]);
@@ -231,6 +232,7 @@ fastify.get('/statement', async (request, reply) => {
 
     reply.send(returnObj)
   }
+
   catch (error) {
     reply.status(400).send({ error: error.message });
     console.log(error);

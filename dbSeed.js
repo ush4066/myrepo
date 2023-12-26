@@ -93,7 +93,7 @@ const seedData = async () => {
 const main = async () => {
   try {
     await createTables();
-    await seedData();
+    // await seedData();
     console.log('Database seeding completed successfully.');
   } catch (err) {
     console.error('Error during database seeding:', err);
