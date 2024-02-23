@@ -1,7 +1,5 @@
 {
-    "exclude": [
-        "ht-sdk-dist"
-    ],
+    "exclude": [],
     "reporter": [
         "html"
     ]

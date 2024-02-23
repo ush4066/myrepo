@@ -1,3 +1,6 @@
 node_modules
 .nyc_output
-ht-sdk-dist
+.vscode
+coverage
+.npmrc
+.htConf.js

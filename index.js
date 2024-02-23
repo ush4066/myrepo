@@ -1,9 +1,21 @@
 
 process.env.HT_MODE = process.env.HT_MODE || 'RECORD';
-// process.env.HT_MODE = 'REPLAY';
 
 const htSdk = require('@hypertestco/node-sdk');
-htSdk.initialize({ apiKey: 'Kshitij', serviceId: '93db84ae-6098-4249-baab-b24420612094' });
+const Date = htSdk.HtDate; // if you want to mock system time
+
+/* -- DELETE befpre pushing to git -- */
+const localServiceId = 'e700b4bd-7395-4217-988e-8bc4cc3bcfb6';
+const remoteServiceId = '8e950615-2d5f-4e64-ac10-62d972e82c80'
+const creds = require('./creds');
+const serviceId = creds.serviceIdentifer; //process.env.HT_SERVICE_ID; // set service id here
+
+/* istanbul ignore next */
+if (!serviceId) {
+  throw new Error('Please set service id');
+}
+
+htSdk.initialize({ apiKey: 'DEMO-API-KEY', serviceId });
 
 
 const opentelemetry = require('@opentelemetry/sdk-node');
@@ -22,11 +34,9 @@ const resource = new Resource({
 const sdk = new opentelemetry.NodeSDK({
   resource,
   traceExporter: new OTLPTraceExporter({
-    // optional - default url is http://localhost:4318/v1/traces
-    url: "http://localhost:4317",
+    // url: "http://localhost:4317",
     // url: 'http://localhost:3008',
-    // optional - collection of custom headers to be sent with each request, empty by default
-    headers: {},
+    url: creds.loggerUrl,
   }),
   instrumentations: [],
 });
@@ -189,13 +199,13 @@ fastify.post('/transaction', async (request, reply) => {
     const account = accountQuery.rows[0];
 
     // CORRECT IMPLEMETATATION
-    const newBalance = account.current_balance + amount;
+    let newBalance = account.current_balance + amount;
 
     // bug 1 - tranction amount hardcoded to zero
-    // const newBalance = account.current_balance + 0;
+    // newBalance = account.current_balance + 0;
 
     // bug 2 - flip amount to negative -> credit becomes debit and vice-versa
-    // const newBalance = account.current_balance - amount;
+    // newBalance = account.current_balance - amount;
 
     if (newBalance < account.minimum_balance) {
       throw new Error('Transaction would result in balance falling below the minimum required');
@@ -211,8 +221,8 @@ fastify.post('/transaction', async (request, reply) => {
 
 //Statement
 fastify.get('/statement', async (request, reply) => {
-  await axios.get('https://hypertest-demo-1234.requestcatcher.com/12345');
   try {
+    await axios.get('https://hypertest-demo-1234.requestcatcher.com/12345');
     const { accountId } = request.query;
     const balance = await pool.query('select current_balance from accounts where id = $1', [accountId]);
     const transaction = await pool.query('select * from transactions where account_id = $1', [accountId]);
@@ -220,9 +230,9 @@ fastify.get('/statement', async (request, reply) => {
       reply.send({ message: 'No tranasctions found' })
       return
     }
-    const transactionList = transaction.rows;
-    // bug added here
-    // const transactionList = transaction.rows.filter(x => x.transaction_type === 'credit');
+    let transactionList = transaction.rows;
+    // bug - 4
+    // transactionList = transaction.rows.map(x => x.transaction_type === null).filter((x, index) => index < 1);
 
     const returnObj = {
       current_balance: balance.rows[0].current_balance,
@@ -239,12 +249,48 @@ fastify.get('/statement', async (request, reply) => {
   }
 })
 
+function getCurrentConversionRate() {
+  return Date.now() % 10;
+}
+
+fastify.get('/dollar-coversion-test', async (request, reply) => {
+  try {
+    let amount = Number(request.query.amount);
+    if (isNaN(amount) || amount <= 0) {
+      throw new Error('Invalid amount');
+    }
+
+    // making an outbount call for no reason
+    const { data: externalResponse } = await axios.get('https://hypertest-demo-1234.requestcatcher.com/12345');
+    const coversionRate = getCurrentConversionRate();
+    let convertedAmount = amount * coversionRate;
+
+    // bug 5 - return wrong amount
+    // convertedAmount = amount + coversionRate;
+
+    const returnObj = {
+      amount,
+      coversionRate,
+      convertedAmount,
+      externalResponse,
+    }
+
+    reply.send(returnObj);
+  }
+
+  catch (error) {
+    reply.status(400).send({ error: error.message });
+    // console.log(error);
+  }
+});
+
 // Start server
 const start = async () => {
   try {
     await fastify.listen({ port: 12300, host: 'localhost' });
+    htSdk.markAppAsReady();
     fastify.log.info(`Server listening on ${fastify.server.address().port}`);
-  } catch (err) {
+  } catch (err) /* istanbul ignore next */ {
     fastify.log.error(err);
     process.exit(1);
   }
