@@ -1,6 +1,7 @@
 {
     "exclude": [],
     "reporter": [
-        "html"
+        "html",
+        "text"
     ]
 }
