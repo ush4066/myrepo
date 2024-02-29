@@ -3,6 +3,7 @@ Demo app for previewing app for hypertest node sdk
 
 ## Prerequisites
 1. Docker v25+. Install it using `curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh`
+2. nodejs 18+. Install it using nvm. `nvm install 20`. get nvm from here https://github.com/nvm-sh/nvm
 
 ## Installation
 - Clone the repo
