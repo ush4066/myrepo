@@ -6,7 +6,7 @@ Demo app for previewing app for hypertest node sdk
 2. nodejs 18+. Install it using nvm. `nvm install 20`. get nvm from here https://github.com/nvm-sh/nvm
 
 ## Installation
-- Clone the repo
+- Clone the dupe repo
 - Obtain credentials from hypertest team (email, password, npm_token, service_identifier, things to set in creds.js)
 - Log into hypertest dashboard using the email and password provided.
 - Select/create a new service. note its identifier (it would be a uuid)
