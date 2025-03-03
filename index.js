@@ -1,55 +1,26 @@
-
+// Set this on top inside your JS app
 process.env.HT_MODE = process.env.HT_MODE || 'RECORD';
 
-const htSdk = require('@hypertestco/node-sdk');
-const Date = htSdk.HtDate; // if you want to mock system time
-
-/* -- DELETE befpre pushing to git -- */
-const localServiceId = 'e700b4bd-7395-4217-988e-8bc4cc3bcfb6';
-const remoteServiceId = '8e950615-2d5f-4e64-ac10-62d972e82c80'
-const creds = require('./creds');
-const serviceId = creds.serviceIdentifer; //process.env.HT_SERVICE_ID; // set service id here
-
-/* istanbul ignore next */
-if (!serviceId) {
-  throw new Error('Please set service id');
-}
-
-htSdk.initialize({ apiKey: 'DEMO-API-KEY', serviceId });
+// import * as htSdk from '@hypertestco/node-sdk'; // for esm/ts
 
 
-const opentelemetry = require('@opentelemetry/sdk-node');
-const { Resource } = require('@opentelemetry/resources');
-const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
-const {
-  OTLPTraceExporter,
-} = require('@opentelemetry/exporter-trace-otlp-grpc');
+const htSdk = require('@hypertestco/node-sdk'); // for commonJS
 
-// Define your resource
-const resource = new Resource({
-  [SemanticResourceAttributes.SERVICE_NAME]: 'sample-banking-app-node',
-  [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.1',
+htSdk.initialize({
+    serviceId: 'f6ff53ea-790f-433e-9d50-64d397900fa3',
+    serviceName: '<organizationName:service-name>',
+    exporterUrl: 'http://v2-beta-external.hypertest.co:4319',
+    // ignoredHostsForHttpReqs: ['abc.xyz.com', /^\d+\.abcd\.co(m|)$/],
+    // disableInstrumentations: [] // htSdk.HtInstrumentations enum 
 });
 
-const sdk = new opentelemetry.NodeSDK({
-  resource,
-  traceExporter: new OTLPTraceExporter({
-    // url: "http://localhost:4317",
-    // url: 'http://localhost:3008',
-    url: creds.loggerUrl,
-  }),
-  instrumentations: [],
-});
-
-sdk.start();
-
-htSdk.autoInstrumentation();
-htSdk.setHtTracerProvider(sdk._tracerProvider);
 
 const axios = require('axios');
 const fastify = require('fastify')({ logger: true });
 const { Pool } = require('pg');
 
+
+module.exports = { fastify }
 // PostgreSQL connection
 const pool = new Pool({
   user: 'ht',
@@ -205,7 +176,7 @@ fastify.post('/transaction', async (request, reply) => {
     // newBalance = account.current_balance + 0;
 
     // bug 2 - flip amount to negative -> credit becomes debit and vice-versa
-    // newBalance = account.current_balance - amount;
+    //newBalance = account.current_balance - amount;
 
     if (newBalance < account.minimum_balance) {
       throw new Error('Transaction would result in balance falling below the minimum required');
@@ -247,7 +218,7 @@ fastify.get('/statement', async (request, reply) => {
     reply.status(400).send({ error: error.message });
     console.log(error);
   }
-})
+})//copy
 
 function getCurrentConversionRate() {
   return Date.now() % 10;
@@ -288,12 +259,14 @@ fastify.get('/dollar-coversion-test', async (request, reply) => {
 const start = async () => {
   try {
     await fastify.listen({ port: 12300, host: 'localhost' });
-    htSdk.markAppAsReady();
     fastify.log.info(`Server listening on ${fastify.server.address().port}`);
+    htSdk.markAppAsReady();
   } catch (err) /* istanbul ignore next */ {
     fastify.log.error(err);
     process.exit(1);
   }
 };
 
-start();
+if (require.main === module) {
+   start();
+}

@@ -1,0 +1,6 @@
+{
+  "exclude":["node_modules", "htConfSample.js", "coverage", ".nyc_output", "ht-coverage"],
+  "reporter": ["json-summary"],
+  "report-dir": "ht-coverage",
+  "cache": false
+}
