@@ -17,8 +17,8 @@
   "license": "",
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@hypertestco/ht-cli": "0.2.25-52",
-    "@hypertestco/node-sdk": "0.2.25-52",
+    "@hypertestco/ht-cli": "0.2.25-53",
+    "@hypertestco/node-sdk": "0.2.25-53",
     "axios": "^1.6.2",
     "fastify": "^4.24.3",
     "pg": "^8.11.3"
