@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "npm run dbSeed && kill-port 12300 && node index.js",
-    "start-app-with-nyc" : "nyc node index.js",
+    "start-app-with-nyc": "nyc node index.js",
     "dbSeed": "docker compose up -d && node dbSeed.js",
     "simulate-traffic": "node simulateTraffic.js",
     "run-test": "htcli start-new-test --config-file-path ./.htTestConf.js",
@@ -16,6 +16,7 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "16": "^0.0.2",
     "@faker-js/faker": "^8.4.1",
     "@hypertestco/ht-cli": "0.2.25-53",
     "@hypertestco/node-sdk": "0.2.25-53",
