@@ -14,7 +14,7 @@ module.exports = {
   httpCandidateUrl: 'http://localhost:12300',  // Eg. 'http://localhost:9999' HTTP URL of App under test (Optional)
   // graphqlCandidateUrl: '',  // Eg. 'http://localhost:9999/graphql' GraphQL URL of App under test (Optional)
 
-  appStartCommand: 'npm.cmd',  // Command to start the app (Required)
+  appStartCommand: 'npm',  // Command to start the app (Required)
   appStartCommandArgs: ['run', 'start-app-with-nyc'],  // App start command arguments (Required)
   appWorkingDirectory: __dirname,  // Working directory for the app (default: current working dir) (Optional)
   appStartTimeoutSec: 60,  // Timeout in seconds for the start command (default: 10) (Optional)
