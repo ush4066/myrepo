@@ -28,6 +28,7 @@ module.exports = {
   },
   fastMode: true, // Default false. (aggregate requests only on the basis of request input and output schema - ignoring mock schemas)
 
+
   // shouldReportHeaderDiffs: false,  // Whether to report differences in headers (default: false) (Optional)
   // showAppLogs: true, // Whether to show app logs (default: false) (Optional)
   // showAppStdErrLogs: true,  // Whether to show stderr logs of the application (default: true) (Optional)
