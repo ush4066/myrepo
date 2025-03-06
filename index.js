@@ -14,10 +14,22 @@ htSdk.initialize({
     // disableInstrumentations: [] // htSdk.HtInstrumentations enum 
 });
 
+htSdk.setCommittHash('CommitHash')
+
+htSdk.measureContinuousCoverage({
+  backendBaseUrl: 'http://v2-beta-external.hypertest.co:8001',
+  htExtraHeaders: {  // Object containing additional headers for HyperTest server requests (Optional)
+    authorization: 'Basic ' + Buffer.from('HyperTest-Demo:HyperTest-Demo').toString('base64'),
+  },
+  buildId:'random',
+  serviceId: 'f6ff53ea-790f-433e-9d50-64d397900fa3'
+})
+
 
 const axios = require('axios');
 const fastify = require('fastify')({ logger: true });
 const { Pool } = require('pg');
+const { htBackendBaseUrl, htExtraHeaders } = require('./.htTestConf');
 
 
 module.exports = { fastify }
