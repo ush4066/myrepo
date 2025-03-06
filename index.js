@@ -176,7 +176,7 @@ fastify.post('/transaction', async (request, reply) => {
     // newBalance = account.current_balance + 0;
 
     // bug 2 - flip amount to negative -> credit becomes debit and vice-versa
-    newBalance = account.current_balance - amount;
+    //newBalance = account.current_balance - amount;
 
     if (newBalance < account.minimum_balance) {
       throw new Error('Transaction would result in balance falling below the minimum required');
