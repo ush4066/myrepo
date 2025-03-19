@@ -14,7 +14,7 @@ htSdk.initialize({
     // disableInstrumentations: [] // htSdk.HtInstrumentations enum 
 });
 
-htSdk.setCommittHash('CommitHash')
+//htSdk.setCommittHash('CommitHash')
 
 htSdk.measureContinuousCoverage({
   backendBaseUrl: 'http://v2-beta-external.hypertest.co:8001',
@@ -22,7 +22,7 @@ htSdk.measureContinuousCoverage({
     authorization: 'Basic ' + Buffer.from('HyperTest-Demo:HyperTest-Demo').toString('base64'),
   },
   buildId:'random',
-  serviceId: 'f6ff53ea-790f-433e-9d50-64d397900fa3'
+  serviceId: 'f6ff53ea-f6ff53ea-790f-433e-9d50-64d397900fa3-433e-9d50-64d397900fa3'
 })
 
 
@@ -188,7 +188,7 @@ fastify.post('/transaction', async (request, reply) => {
     // newBalance = account.current_balance + 0;
 
     // bug 2 - flip amount to negative -> credit becomes debit and vice-versa
-    //newBalance = account.current_balance - amount;
+    newBalance = account.current_balance - amount;
 
     if (newBalance < account.minimum_balance) {
       throw new Error('Transaction would result in balance falling below the minimum required');
